@@ -1,10 +1,15 @@
-import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import ProfileList from './pages/ProfileList';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </>
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/list" element={<ProfileList />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 

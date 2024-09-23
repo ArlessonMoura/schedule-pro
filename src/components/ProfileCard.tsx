@@ -1,6 +1,14 @@
 import { FaTrashAlt, FaPen } from 'react-icons/fa'
 
-export default function ProfileCard({ user }) {
+type User = {
+  id: string
+  email: string
+  first_name: string
+  last_name: string
+  avatar: string
+}
+
+export default function ProfileCard({ user }: { user: User }) {
   const { id, email, first_name, last_name, avatar } = user
 
   return (

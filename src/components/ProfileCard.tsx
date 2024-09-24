@@ -19,7 +19,7 @@ export default function ProfileCard({ user }: { user: User }) {
 
   return (
     <animated.div style={{ ...springs }}>
-      <section className="grid grid-cols-3 grid-rows-4 gap-4 border-2 border-gray-300 p-4">
+      <section className="grid grid-cols-3 grid-rows-4 gap-4 border-2 border-gray-300 p-4 h-56">
         <img className="row-span-3" src={avatar} alt="profile" />
 
         <article className="flex justify-between flex-col col-span-2 row-span-3">

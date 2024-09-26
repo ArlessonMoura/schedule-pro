@@ -3,6 +3,7 @@ import ProfileCard from '../components/ProfileCard'
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import Header from '../components/Header'
+import { Toaster } from '@/components/ui/toaster'
 
 export default function ProfileList() {
   const { ref, inView } = useInView()
@@ -73,6 +74,7 @@ export default function ProfileList() {
           {isFetching && !isFetchingNextPage ? 'Background Updating...' : null}
         </div>
       </main>
+      <Toaster />
     </>
   )
 }

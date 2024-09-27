@@ -4,16 +4,12 @@ import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import Header from '../components/Header'
 import { Toaster } from '@/components/ui/toaster'
-import { Page } from '@/types/custom'
+import { FetchUsersInterface } from '@/types/custom'
 
 export default function ProfileList() {
   const { ref, inView } = useInView()
 
-  const fetchUsers = async ({
-    pageParam
-  }: {
-    pageParam: number
-  }): Promise<Page> => {
+  const fetchUsers: FetchUsersInterface = async ({ pageParam }) => {
     const res = await fetch('https://reqres.in/api/users?page=' + pageParam)
     return await res.json()
   }

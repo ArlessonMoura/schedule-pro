@@ -13,3 +13,7 @@ export type Page = {
   total_pages: number
   data: Array<User>
 }
+
+export interface FetchUsersInterface {
+  ({ pageParam }: { pageParam: number }): Promise<Page>
+}

@@ -1,5 +1,9 @@
 import { useToast } from '@/hooks/use-toast'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient
+} from '@tanstack/react-query'
 import { Button } from './ui/button'
 import { RxReload } from 'react-icons/rx'
 import {
@@ -13,12 +17,13 @@ import {
 } from './ui/dialog'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
+import { Page, User } from '@/types/custom'
 
 export default function Header() {
   const { toast } = useToast()
-  // const queryClient = useQueryClient()
+  const queryClient = useQueryClient()
 
-  const createUser = async (user: object) => {
+  const createUser = async (user: User) => {
     const res = await fetch('https://reqres.in/api/users', {
       method: 'POST',
       body: JSON.stringify(user),
@@ -29,9 +34,15 @@ export default function Header() {
 
   const { mutate, isPending, isError, isSuccess } = useMutation({
     mutationFn: createUser
-    // onSuccess: newUser => {
+    // Workaround to be used in a fake api that doesn't save the data sent in a post request
+    // The cache needs to be updated manually to reflect the data change on the client side
+    // onSuccess: () => {
     //   queryClient.setQueryData(['users'], (prevUsers) => )
     // },
+
+    // To be used on a real api that actually saves the data being posted
+    // After the post is made successfully, the queries defined in the queryKey
+    // are invalidated and are automatically refetched
     // onSuccess: () => {
     //   queryClient.invalidateQueries({ queryKey: ['users'] })
     // }
@@ -82,12 +93,38 @@ export default function Header() {
                 type="submit"
                 onClick={() => {
                   mutate(
-                    { name: 'morpheus', job: 'leader' },
                     {
-                      onSuccess: () =>
+                      id: '80',
+                      email: 'ksdlkdl',
+                      first_name: 'mudado',
+                      last_name: 'mudado 2',
+                      avatar: 'https://reqres.in/img/faces/1-image.jpg'
+                    },
+                    {
+                      onSuccess: (data, newUser, context) => {
+                        queryClient.setQueryData(
+                          ['users'],
+                          (oldData: InfiniteData<Page, unknown>) => {
+                            const newData = structuredClone(oldData)
+                            const lastPageIndex = newData.pages.length - 1
+                            newData.pages[lastPageIndex].data.push(newUser)
+
+                            // newData.pages.forEach(page => {
+                            //   const usersPerPage = page.data.length
+                            //   if (usersPerPage < 6) {
+                            //     page.data.push(newUser)
+                            //   }
+                            // })
+
+                            return newData
+                          }
+                        )
+
                         toast({
                           description: 'User added successfully'
-                        }),
+                        })
+                      },
+
                       onError: () => {
                         toast({
                           description: 'An error has occurred'

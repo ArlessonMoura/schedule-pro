@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -79,29 +80,17 @@ export default function ProfileCard({ user }: { user: User }) {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
-                <DialogTitle>Update user information</DialogTitle>
+                <DialogTitle>Delete user</DialogTitle>
+                <DialogDescription>
+                  {`Are you sure you want to delete ${first_name} ${last_name}?`}
+                </DialogDescription>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <Input id="name" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="lastname" className="text-right">
-                    Last Name
-                  </Label>
-                  <Input id="lastname" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="email" className="text-right">
-                    Email
-                  </Label>
-                  <Input id="email" className="col-span-3" />
-                </div>
-              </div>
               <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="button" variant="secondary">
+                    Cancel
+                  </Button>
+                </DialogClose>
                 <DialogClose>
                   <Button
                     type="submit"
@@ -128,7 +117,7 @@ export default function ProfileCard({ user }: { user: User }) {
                             )
 
                             toast({
-                              description: 'User deleted'
+                              description: `User ${first_name} ${last_name} was deleted`
                             })
                           },
                           onError: error => {
@@ -140,7 +129,7 @@ export default function ProfileCard({ user }: { user: User }) {
                       )
                     }}
                   >
-                    Save changes
+                    Confirm
                   </Button>
                 </DialogClose>
               </DialogFooter>

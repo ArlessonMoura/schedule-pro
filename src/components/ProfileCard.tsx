@@ -21,6 +21,7 @@ import {
 import { useToast } from '@/hooks/use-toast'
 import { RxReload } from 'react-icons/rx'
 import { Page, User } from '@/types/custom'
+import DeleteButton from './DeleteButton'
 
 export default function ProfileCard({ user }: { user: User }) {
   const { id, email, first_name, last_name, avatar } = user
@@ -69,72 +70,7 @@ export default function ProfileCard({ user }: { user: User }) {
         </article>
 
         <div className="flex justify-evenly col-span-2 col-start-2 row-start-4">
-          <Dialog>
-            <DialogTrigger asChild>
-              <button disabled={isPending}>
-                {isPending && (
-                  <RxReload className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                {!isPending && <FaTrashAlt />}
-              </button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Delete user</DialogTitle>
-                <DialogDescription>
-                  {`Are you sure you want to delete ${first_name} ${last_name}?`}
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button type="button" variant="secondary">
-                    Cancel
-                  </Button>
-                </DialogClose>
-                <DialogClose>
-                  <Button
-                    type="submit"
-                    onClick={() => {
-                      mutate(
-                        { id, email, first_name: 'mudado', last_name, avatar },
-                        {
-                          onSuccess: (data, updatedUser, context) => {
-                            queryClient.setQueryData(
-                              ['users'],
-                              (oldData: InfiniteData<Page, unknown>) => {
-                                const newData = structuredClone(oldData)
-                                newData.pages.forEach(page => {
-                                  page.data.forEach(user => {
-                                    if (user.id === updatedUser.id) {
-                                      const updatedUserIndex =
-                                        page.data.indexOf(user)
-                                      page.data.splice(updatedUserIndex, 1)
-                                    }
-                                  })
-                                })
-                                return newData
-                              }
-                            )
-
-                            toast({
-                              description: `User ${first_name} ${last_name} was deleted`
-                            })
-                          },
-                          onError: error => {
-                            toast({
-                              description: 'An error has occurred' + error
-                            })
-                          }
-                        }
-                      )
-                    }}
-                  >
-                    Confirm
-                  </Button>
-                </DialogClose>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <DeleteButton user={user} />
 
           <Dialog>
             <DialogTrigger asChild>
